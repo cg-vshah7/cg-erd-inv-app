@@ -1,0 +1,39 @@
+# Development overrides
+# Applied automatically when running: docker compose up
+# Start only infra for local dev:
+#   docker compose up postgres keycloak -d
+# Then run backend and frontend locally.
+
+services:
+
+  # Backend: hot-reload with source volume mount
+  backend:
+    build:
+      context: ./backend
+      target: development
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./backend:/app
+    environment:
+      APP_ENV: development
+      # Reach postgres and keycloak via Docker network
+      DATABASE_URL: postgresql+asyncpg://erd_inv_user:change_me_db_password@postgres:5432/erd_inv
+      KEYCLOAK_URL: http://keycloak:8080
+    ports:
+      - "8000:8000"
+
+  # Frontend: skipped in docker compose — run with `npm run dev` instead.
+  # Remove this block if you prefer to run the frontend container.
+  frontend:
+    profiles:
+      - donotstart
+
+  # Expose Keycloak on host for browser redirects during local dev
+  keycloak:
+    ports:
+      - "8080:8080"
+
+  # Expose PostgreSQL on host for local DB tools (DBeaver, psql, etc.)
+  postgres:
+    ports:
+      - "5432:5432"

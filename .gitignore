@@ -1,0 +1,131 @@
+# =============================================================================
+# CG ERD Inventory App — .gitignore
+# =============================================================================
+
+# Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
+
+# -----------------------------------------------------------------------------
+# Environment files — NEVER commit secrets
+# -----------------------------------------------------------------------------
+.env
+.env.local
+.env.*.local
+*.env
+
+# -----------------------------------------------------------------------------
+# Python (backend)
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+env.bak/
+venv.bak/
+
+# Testing
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.cover
+.hypothesis/
+
+# Type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff cache
+.ruff_cache/
+
+# -----------------------------------------------------------------------------
+# Node.js / Frontend
+# -----------------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Build output
+dist/
+build/
+.next/
+out/
+
+# Vite
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+# Don't commit local overrides with real secrets
+docker-compose.local.yml
+
+# -----------------------------------------------------------------------------
+# OS / Editor
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.tmp
+*.swp
+*.swo
+*~
+
+.vscode/
+.idea/
+*.iml
+
+# -----------------------------------------------------------------------------
+# Logs
+# -----------------------------------------------------------------------------
+*.log
+logs/
+
+# -----------------------------------------------------------------------------
+# Alembic (keep migrations, not generated pyc)
+# -----------------------------------------------------------------------------
+# backend/migrations/versions/ is committed intentionally
+
+# -----------------------------------------------------------------------------
+# Test artifacts
+# -----------------------------------------------------------------------------
+.pytest_cache/
+test-results/
+junit*.xml

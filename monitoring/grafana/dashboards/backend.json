@@ -1,0 +1,125 @@
+{
+  "__inputs": [],
+  "__requires": [
+    { "type": "grafana", "id": "grafana", "name": "Grafana", "version": "10.4.0" },
+    { "type": "datasource", "id": "prometheus", "name": "Prometheus", "version": "1.0.0" }
+  ],
+  "annotations": { "list": [] },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "panels": [
+    {
+      "id": 1,
+      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+      "type": "stat",
+      "title": "Request Rate (req/s)",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "rate(http_requests_total{job=\"backend\"}[1m])",
+          "legendFormat": "req/s"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+      "type": "stat",
+      "title": "Error Rate (%)",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "rate(http_requests_total{job=\"backend\",status=~\"5..\"}[1m]) / rate(http_requests_total{job=\"backend\"}[1m]) * 100",
+          "legendFormat": "error %"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 1 },
+              { "color": "red", "value": 5 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 3,
+      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+      "type": "stat",
+      "title": "p99 Latency (ms)",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{job=\"backend\"}[5m])) * 1000",
+          "legendFormat": "p99 ms"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "steps": [
+              { "color": "green", "value": null },
+              { "color": "yellow", "value": 500 },
+              { "color": "red", "value": 2000 }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 4,
+      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+      "type": "stat",
+      "title": "Check-ins Today",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "increase(device_checkins_total[24h])",
+          "legendFormat": "check-ins"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+      "type": "timeseries",
+      "title": "Request Rate by Status",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "rate(http_requests_total{job=\"backend\"}[1m])",
+          "legendFormat": "{{status}}"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+      "type": "timeseries",
+      "title": "Device Check-ins / Check-outs",
+      "targets": [
+        {
+          "datasource": "Prometheus",
+          "expr": "rate(device_checkins_total[5m])",
+          "legendFormat": "check-ins/s"
+        },
+        {
+          "datasource": "Prometheus",
+          "expr": "rate(device_checkouts_total[5m])",
+          "legendFormat": "check-outs/s"
+        }
+      ]
+    }
+  ],
+  "schemaVersion": 39,
+  "tags": ["backend", "erd-inv"],
+  "title": "ERD Inventory — Backend",
+  "uid": "erd-inv-backend",
+  "version": 1
+}

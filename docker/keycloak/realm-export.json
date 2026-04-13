@@ -1,0 +1,195 @@
+{
+  "id": "erd-inv",
+  "realm": "erd-inv",
+  "displayName": "ERD Inventory",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "passwordPolicy": "length(8) and upperCase(1) and lowerCase(1) and digits(1) and notUsername(undefined)",
+  "roles": {
+    "realm": [
+      {
+        "id": "super_admin",
+        "name": "super_admin",
+        "description": "Full system access — manages accounts, engineers, locations",
+        "composite": false,
+        "clientRole": false
+      }
+    ],
+    "client": {
+      "erd-inv-frontend": [],
+      "erd-inv-backend": []
+    }
+  },
+  "clients": [
+    {
+      "id": "erd-inv-frontend",
+      "clientId": "erd-inv-frontend",
+      "name": "ERD Inventory Frontend",
+      "description": "Public SPA client using Authorization Code + PKCE",
+      "rootUrl": "http://localhost:5173",
+      "adminUrl": "",
+      "baseUrl": "http://localhost:5173",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:5173/*",
+        "http://localhost:3000/*",
+        "http://localhost/*"
+      ],
+      "webOrigins": [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:5173/*##http://localhost:3000/*##http://localhost/*"
+      },
+      "fullScopeAllowed": true,
+      "defaultClientScopes": ["openid", "profile", "email", "roles"],
+      "optionalClientScopes": []
+    },
+    {
+      "id": "erd-inv-backend",
+      "clientId": "erd-inv-backend",
+      "name": "ERD Inventory Backend",
+      "description": "Confidential client used by the FastAPI backend for Admin REST API calls",
+      "enabled": true,
+      "clientAuthenticatorType": "client-secret",
+      "secret": "change-me-in-production",
+      "publicClient": false,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "attributes": {},
+      "fullScopeAllowed": true,
+      "defaultClientScopes": ["openid", "profile", "email", "roles"],
+      "optionalClientScopes": []
+    }
+  ],
+  "users": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "username": "admin",
+      "email": "admin@erd-inv.local",
+      "firstName": "System",
+      "lastName": "Administrator",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Admin1234!",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["super_admin", "default-roles-erd-inv"],
+      "clientRoles": {}
+    }
+  ],
+  "scopeMappings": [],
+  "clientScopeMappings": {},
+  "defaultDefaultClientScopes": [
+    "role_list",
+    "profile",
+    "email",
+    "roles",
+    "web-origins",
+    "acr"
+  ],
+  "defaultOptionalClientScopes": [
+    "offline_access",
+    "address",
+    "phone",
+    "microprofile-jwt"
+  ],
+  "browserSecurityHeaders": {
+    "contentSecurityPolicyReportOnly": "",
+    "xContentTypeOptions": "nosniff",
+    "xRobotsTag": "none",
+    "xFrameOptions": "SAMEORIGIN",
+    "contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
+    "xXSSProtection": "1; mode=block",
+    "strictTransportSecurity": "max-age=31536000; includeSubDomains"
+  },
+  "smtpServer": {},
+  "loginTheme": "",
+  "accountTheme": "",
+  "adminTheme": "",
+  "emailTheme": "",
+  "eventsEnabled": false,
+  "eventsExpiration": 0,
+  "adminEventsEnabled": false,
+  "adminEventsDetailsEnabled": false,
+  "internationalizationEnabled": false,
+  "supportedLocales": [],
+  "defaultLocale": "en",
+  "authenticationFlows": [],
+  "authenticatorConfig": [],
+  "requiredActions": [
+    {
+      "alias": "VERIFY_EMAIL",
+      "name": "Verify Email",
+      "providerId": "VERIFY_EMAIL",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 50,
+      "config": {}
+    },
+    {
+      "alias": "UPDATE_PASSWORD",
+      "name": "Update Password",
+      "providerId": "UPDATE_PASSWORD",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 30,
+      "config": {}
+    },
+    {
+      "alias": "CONFIGURE_TOTP",
+      "name": "Configure OTP",
+      "providerId": "CONFIGURE_TOTP",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 10,
+      "config": {}
+    },
+    {
+      "alias": "UPDATE_PROFILE",
+      "name": "Update User Profile",
+      "providerId": "UPDATE_PROFILE",
+      "enabled": true,
+      "defaultAction": false,
+      "priority": 40,
+      "config": {}
+    }
+  ],
+  "browserFlow": "browser",
+  "registrationFlow": "registration",
+  "directGrantFlow": "direct grant",
+  "resetCredentialsFlow": "reset credentials",
+  "clientAuthenticationFlow": "clients",
+  "dockerAuthenticationFlow": "docker auth",
+  "attributes": {
+    "frontendUrl": "",
+    "acr.loa.map": "{}",
+    "displayName": "ERD Inventory",
+    "displayNameHtml": "<b>ERD Inventory</b>"
+  },
+  "keycloakVersion": "24.0.0",
+  "groups": []
+}
