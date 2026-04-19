@@ -41,9 +41,8 @@ def create_app() -> FastAPI:
     # Prometheus metrics — exposed at /metrics
     Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
-    # API router is included here once routes are implemented (Phase 4+)
-    # from app.api.v1.router import api_router
-    # app.include_router(api_router, prefix="/api/v1")
+    from app.api.v1.router import api_router
+    app.include_router(api_router, prefix="/api/v1")
 
     return app
 
