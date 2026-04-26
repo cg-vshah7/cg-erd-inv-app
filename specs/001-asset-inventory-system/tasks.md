@@ -185,16 +185,16 @@
 
 **Independent Test**: Check in a device, then check it out → status = Checked-Out, location = null in device record → audit log has CHECK_OUT entry → trying to check out again shows error
 
-- [ ] T079 Add `check_out(device_id, request, engineer, db) → Device` to `backend/app/services/device_service.py`:
+- [x] T079 Add `check_out(device_id, request, engineer, db) → Device` to `backend/app/services/device_service.py`:
   1. Load device, verify `status=CHECKED_IN` (else raise `ConflictError`)
   2. Verify engineer has `can_checkin_out` on device's `customer_account_id`
   3. Update device: `status=CHECKED_OUT`, `location_id=NULL`, `checked_out_by_id=engineer.id`, `checked_out_at`
   4. Insert `AuditLog` with `action=CHECK_OUT` (location_id=null, location_snapshot=null)
   5. Commit atomically
-- [ ] T080 Add routes to `backend/app/api/v1/devices.py`: `POST /devices/{id}/checkout` (calls `device_service.check_out`), `PATCH /devices/{id}` (edit checked-in device — model, location, comments; requires `can_checkin_out`)
-- [ ] T081 Add `useCheckOut()` and `useUpdateDevice()` mutations to `frontend/src/hooks/useDevices.ts`
-- [ ] T082 Create `frontend/src/pages/CheckOutPage.tsx`: device selector (search by serial in engineer's accounts, filtered to Checked-In only), check-out date picker (default today), optional comments, confirm button → POST /{id}/checkout → success snackbar
-- [ ] T083 Create `frontend/src/pages/DevicesPage.tsx`: DataTable with columns (serial, model, status, location, checked-in-by, checked-in-at, account); StatusChip for status column; row action buttons (Check Out, Edit); basic account + status filter dropdowns above table
+- [x] T080 Add routes to `backend/app/api/v1/devices.py`: `POST /devices/{id}/checkout` (calls `device_service.check_out`), `PATCH /devices/{id}` (edit checked-in device — model, location, comments; requires `can_checkin_out`)
+- [x] T081 Add `useCheckOut()` and `useUpdateDevice()` mutations to `frontend/src/hooks/useDevices.ts`
+- [x] T082 Create `frontend/src/pages/CheckOutPage.tsx`: device selector (search by serial in engineer's accounts, filtered to Checked-In only), check-out date picker (default today), optional comments, confirm button → POST /{id}/checkout → success snackbar
+- [x] T083 Create `frontend/src/pages/DevicesPage.tsx`: DataTable with columns (serial, model, status, location, checked-in-by, checked-in-at, account); StatusChip for status column; row action buttons (Check Out, Edit); basic account + status filter dropdowns above table
 
 **Checkpoint**: Full device lifecycle works end-to-end. Audit log has both CHECK_IN and CHECK_OUT entries.
 

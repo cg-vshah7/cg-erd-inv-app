@@ -11,7 +11,7 @@ from app.models.device import DeviceStatus
 from app.models.engineer_account_mapping import EngineerAccountMapping
 from app.repositories.device_repo import DeviceRepository
 from app.schemas.common import PaginatedResponse
-from app.schemas.device import CheckInRequest, DeviceListParams, DeviceRead
+from app.schemas.device import CheckInRequest, CheckOutRequest, DeviceListParams, DeviceRead, DeviceUpdate
 from app.services import device_service
 
 router = APIRouter(prefix="/devices", tags=["devices"])
@@ -86,4 +86,40 @@ async def get_device(
         if device.customer_account_id not in engineer_accounts:
             raise ForbiddenError("You do not have access to this device")
 
+    return device
+
+
+@router.post("/{device_id}/checkout", response_model=DeviceRead)
+async def check_out_device(
+    device_id: uuid.UUID,
+    payload: CheckOutRequest,
+    user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    device = await device_service.check_out(device_id, payload, user, db)
+    return device
+
+
+@router.patch("/{device_id}", response_model=DeviceRead)
+async def update_device(
+    device_id: uuid.UUID,
+    payload: DeviceUpdate,
+    user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    repo = DeviceRepository(db)
+    device = await repo.get(device_id)
+    if not device:
+        raise NotFoundError(f"Device {device_id} not found")
+
+    if not user.is_super_admin:
+        engineer_accounts = await _get_engineer_account_ids(user.id, db)
+        if device.customer_account_id not in engineer_accounts:
+            raise ForbiddenError("You do not have access to this device")
+
+    updates = payload.model_dump(exclude_none=True)
+    if updates:
+        device = await repo.update(device_id, updates)
+        await db.commit()
+        await db.refresh(device)
     return device

@@ -12,7 +12,7 @@ from app.models.location import LocationLevel
 from app.repositories.audit_log_repo import AuditLogRepository
 from app.repositories.device_repo import DeviceRepository
 from app.repositories.location_repo import LocationRepository
-from app.schemas.device import CheckInRequest
+from app.schemas.device import CheckInRequest, CheckOutRequest
 from app.services import location_service
 
 
@@ -98,6 +98,55 @@ async def check_in(request: CheckInRequest, engineer: Engineer, db: AsyncSession
     )
 
     # 7. Commit device + audit log atomically (satisfies SC-005)
+    await db.commit()
+    await db.refresh(device)
+    return device
+
+
+async def check_out(
+    device_id: uuid.UUID, request: CheckOutRequest, engineer: Engineer, db: AsyncSession
+) -> Device:
+    """Check out a device atomically — updates Device + inserts AuditLog in a single commit."""
+    device_repo = DeviceRepository(db)
+
+    # 1. Load device, verify status=CHECKED_IN
+    device = await device_repo.get(device_id)
+    if not device:
+        raise NotFoundError(f"Device {device_id} not found")
+    if device.status != DeviceStatus.CHECKED_IN:
+        raise ConflictError("Device is not currently checked in")
+
+    # 2. Verify engineer has can_checkin_out on the device's account (super admin bypasses)
+    if not engineer.is_super_admin:
+        await _require_checkin_permission(device.customer_account_id, engineer, db)
+
+    # 3. Update device: CHECKED_OUT, location cleared
+    device = await device_repo.update(
+        device_id,
+        {
+            "status": DeviceStatus.CHECKED_OUT,
+            "location_id": None,
+            "checked_out_by_id": engineer.id,
+            "checked_out_at": request.checked_out_at,
+            "comments": request.comments if request.comments is not None else device.comments,
+        },
+    )
+
+    # 4. Insert AuditLog with action=CHECK_OUT (location_id=null, location_snapshot=null)
+    audit_repo = AuditLogRepository(db)
+    await audit_repo.insert(
+        {
+            "device_id": device.id,
+            "customer_account_id": device.customer_account_id,
+            "action": AuditAction.CHECK_OUT,
+            "engineer_id": engineer.id,
+            "location_id": None,
+            "location_snapshot": None,
+            "comments": request.comments,
+        }
+    )
+
+    # 5. Commit atomically
     await db.commit()
     await db.refresh(device)
     return device

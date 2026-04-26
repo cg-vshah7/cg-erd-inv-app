@@ -73,6 +73,17 @@ export function useDevice(id: string | null) {
   })
 }
 
+export interface CheckOutPayload {
+  checked_out_at: string
+  comments?: string | null
+}
+
+export interface DeviceUpdatePayload {
+  device_model_id?: string | null
+  location_id?: string | null
+  comments?: string | null
+}
+
 export function useCheckIn() {
   const qc = useQueryClient()
   return useMutation({
@@ -80,6 +91,29 @@ export function useCheckIn() {
       api.post<Device>('/devices/checkin', payload).then((r) => r.data),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['devices'] })
+    },
+  })
+}
+
+export function useCheckOut() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ deviceId, payload }: { deviceId: string; payload: CheckOutPayload }) =>
+      api.post<Device>(`/devices/${deviceId}/checkout`, payload).then((r) => r.data),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['devices'] })
+    },
+  })
+}
+
+export function useUpdateDevice() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ deviceId, payload }: { deviceId: string; payload: DeviceUpdatePayload }) =>
+      api.patch<Device>(`/devices/${deviceId}`, payload).then((r) => r.data),
+    onSuccess: (_data, { deviceId }) => {
+      qc.invalidateQueries({ queryKey: ['devices'] })
+      qc.invalidateQueries({ queryKey: ['devices', deviceId] })
     },
   })
 }

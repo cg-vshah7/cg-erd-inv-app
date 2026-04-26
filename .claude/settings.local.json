@@ -7,7 +7,8 @@
       "Bash(cd \"/c/Users/vshah7/OneDrive - Capgemini/Documents/CGLaptopBackup20200810/CapG/ClaudeCode/myfirstclaudeapp/cg-erd-inv-app/frontend\" && mkdir -p src/auth src/components/layout src/components/common src/pages src/hooks src/services src/store src/routes && echo \"Directories created\")",
       "Bash(cd \"/c/Users/vshah7/OneDrive - Capgemini/Documents/CGLaptopBackup20200810/CapG/ClaudeCode/myfirstclaudeapp/cg-erd-inv-app/frontend\" && npm install -D @types/node 2>&1)",
       "Bash(cd \"/c/Users/vshah7/OneDrive - Capgemini/Documents/CGLaptopBackup20200810/CapG/ClaudeCode/myfirstclaudeapp/cg-erd-inv-app/frontend\" && npx tsc --noEmit 2>&1)",
-      "Bash(cd \"C:\\\\Users\\\\vshah7\\\\OneDrive - Capgemini\\\\Documents\\\\CGLaptopBackup20200810\\\\CapG\\\\ClaudeCode\\\\myfirstclaudeapp\\\\cg-erd-inv-app\" && powershell.exe -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks 2>&1)"
+      "Bash(cd \"C:\\\\Users\\\\vshah7\\\\OneDrive - Capgemini\\\\Documents\\\\CGLaptopBackup20200810\\\\CapG\\\\ClaudeCode\\\\myfirstclaudeapp\\\\cg-erd-inv-app\" && powershell.exe -File \".specify/scripts/powershell/check-prerequisites.ps1\" -Json -RequireTasks -IncludeTasks 2>&1)",
+      "Bash(ls \"C:\\\\Users\\\\vshah7\\\\OneDrive - Capgemini\\\\Documents\\\\CGLaptopBackup20200810\\\\CapG\\\\ClaudeCode\\\\myfirstclaudeapp\\\\cg-erd-inv-app\\\\frontend\\\\src\\\\pages\\\\\" 2>/dev/null || echo \"NOT_FOUND\")"
     ]
   }
 }
