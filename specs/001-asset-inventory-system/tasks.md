@@ -136,12 +136,12 @@
 
 **Independent Test**: Engineer with Device Model Master permission creates model "PH-MON-500" → it appears in the model dropdown during check-in for that account
 
-- [ ] T063 Create `backend/app/models/device_model.py`: `DeviceModel` — `id` (UUID PK), `customer_account_id` (FK), `model_number` (str), `name` (str), `description` (str nullable), `manufacturer` (str nullable), `device_category` (str nullable), `is_active` (bool); UNIQUE on `(model_number, customer_account_id)`
-- [ ] T064 Create `backend/app/schemas/device_model.py`: `DeviceModelCreate`, `DeviceModelUpdate`, `DeviceModelRead`, `DeviceModelList`
-- [ ] T065 Create `backend/app/repositories/device_model_repo.py`: `get_by_account(account_id, skip, limit) → list[DeviceModel]`; `get_by_model_number(model_number, account_id) → DeviceModel | None`
-- [ ] T066 Create `backend/app/api/v1/device_models.py`: `GET /device-models` (scoped to engineer's accounts, any permission level), `POST /device-models` (requires `can_manage_models`), `GET /device-models/{id}`, `PATCH /device-models/{id}` (requires `can_manage_models`)
-- [ ] T067 Create `frontend/src/hooks/useDeviceModels.ts`: `useDeviceModels(accountId)`, `useCreateDeviceModel()`, `useUpdateDeviceModel()`
-- [ ] T068 Create `frontend/src/pages/DeviceModelsPage.tsx`: DataTable of device models per account; Create/Edit dialog (model_number, name, description, manufacturer, device_category); guarded by `can_manage_models` permission — shows read-only view for engineers without the permission
+- [x] T063 Create `backend/app/models/device_model.py`: `DeviceModel` — `id` (UUID PK), `customer_account_id` (FK), `model_number` (str), `name` (str), `description` (str nullable), `manufacturer` (str nullable), `device_category` (str nullable), `is_active` (bool); UNIQUE on `(model_number, customer_account_id)`
+- [x] T064 Create `backend/app/schemas/device_model.py`: `DeviceModelCreate`, `DeviceModelUpdate`, `DeviceModelRead`, `DeviceModelList`
+- [x] T065 Create `backend/app/repositories/device_model_repo.py`: `get_by_account(account_id, skip, limit) → list[DeviceModel]`; `get_by_model_number(model_number, account_id) → DeviceModel | None`
+- [x] T066 Create `backend/app/api/v1/device_models.py`: `GET /device-models` (scoped to engineer's accounts, any permission level), `POST /device-models` (requires `can_manage_models`), `GET /device-models/{id}`, `PATCH /device-models/{id}` (requires `can_manage_models`)
+- [x] T067 Create `frontend/src/hooks/useDeviceModels.ts`: `useDeviceModels(accountId)`, `useCreateDeviceModel()`, `useUpdateDeviceModel()`
+- [x] T068 Create `frontend/src/pages/DeviceModelsPage.tsx`: DataTable of device models per account; Create/Edit dialog (model_number, name, description, manufacturer, device_category); guarded by `can_manage_models` permission — shows read-only view for engineers without the permission
 
 **Checkpoint**: Engineer with model permission can create models. Check-in model dropdown populates correctly.
 
