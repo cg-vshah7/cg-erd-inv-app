@@ -19,6 +19,7 @@ import {
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { LocationSelector } from '@/components/common/LocationSelector'
+import { useAccounts } from '@/hooks/useAccounts'
 import { useDeviceModels } from '@/hooks/useDeviceModels'
 import { useCheckIn } from '@/hooks/useDevices'
 import { useUiStore } from '@/store/uiStore'
@@ -103,8 +104,12 @@ export function CheckInPage() {
   const { data: myAccountMappings = [], isLoading: mappingsLoading } = useMyAccounts()
   const checkinAccounts = myAccountMappings.filter((m) => m.can_checkin_out)
 
-  // Load account names for each mapping
+  // Load account name for active selection (used in summary)
   const { data: activeAccountInfo } = useAccountDetails(form.accountId || null)
+
+  // Load account names once for dropdown labels (stable menu items)
+  const { data: accountsData } = useAccounts(0, 1000)
+  const accountNameById = new Map(accountsData?.items.map((a) => [a.id, a.name]))
 
   // Device models for selected account
   const { data: deviceModelsList } = useDeviceModels(form.accountId || null)
@@ -228,11 +233,16 @@ export function CheckInPage() {
               <Select
                 label="Account"
                 value={form.accountId}
-                onChange={(e) => handleAccountChange(e.target.value)}
+                onChange={(e) => handleAccountChange(e.target.value as string)}
               >
-                {checkinAccounts.map((mapping) => (
-                  <AccountMenuItem key={mapping.customer_account_id} accountId={mapping.customer_account_id} />
-                ))}
+                {checkinAccounts.map((mapping) => {
+                  const id = mapping.customer_account_id
+                  return (
+                    <MenuItem key={id} value={id}>
+                      {accountNameById.get(id) ?? id}
+                    </MenuItem>
+                  )
+                })}
               </Select>
             </FormControl>
 
@@ -406,11 +416,6 @@ export function CheckInPage() {
 }
 
 // ── Helpers ──
-
-function AccountMenuItem({ accountId }: { accountId: string }) {
-  const { data } = useAccountDetails(accountId)
-  return <MenuItem value={accountId}>{data?.name ?? accountId}</MenuItem>
-}
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
   return (
