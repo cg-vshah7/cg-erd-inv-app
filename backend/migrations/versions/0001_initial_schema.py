@@ -77,12 +77,12 @@ def upgrade() -> None:
         sa.Column("can_view_only", sa.Boolean(), nullable=False, server_default=sa.text("true")),
         sa.ForeignKeyConstraint(
             ["engineer_id"], ["engineers.id"],
-            name="fk_engineer_account_mappings_engineer_id_engineers",
+            name="fk_eam_engineer_id",
             ondelete="CASCADE",
         ),
         sa.ForeignKeyConstraint(
             ["customer_account_id"], ["customer_accounts.id"],
-            name="fk_engineer_account_mappings_customer_account_id_customer_accounts",
+            name="fk_eam_customer_account_id",
             ondelete="CASCADE",
         ),
         sa.UniqueConstraint("engineer_id", "customer_account_id", name="uq_eam_engineer_account"),
@@ -112,12 +112,12 @@ def upgrade() -> None:
         ),
         sa.ForeignKeyConstraint(
             ["customer_account_id"], ["customer_accounts.id"],
-            name="fk_locations_customer_account_id_customer_accounts",
+            name="fk_locations_customer_account_id",
             ondelete="CASCADE",
         ),
         sa.UniqueConstraint(
             "name", "parent_id", "customer_account_id",
-            name="uq_locations_name_parent_id_customer_account_id",
+            name="uq_locations_name_parent_account",
         ),
         sa.CheckConstraint(
             "(level = 'SITE' AND parent_id IS NULL) OR (level != 'SITE' AND parent_id IS NOT NULL)",
@@ -142,12 +142,12 @@ def upgrade() -> None:
         sa.Column("is_active", sa.Boolean(), nullable=False, server_default=sa.text("true")),
         sa.ForeignKeyConstraint(
             ["customer_account_id"], ["customer_accounts.id"],
-            name="fk_device_models_customer_account_id_customer_accounts",
+            name="fk_device_models_customer_account_id",
             ondelete="CASCADE",
         ),
         sa.UniqueConstraint(
             "model_number", "customer_account_id",
-            name="uq_device_models_model_number_customer_account_id",
+            name="uq_device_models_model_number_account",
         ),
     )
 
@@ -182,7 +182,7 @@ def upgrade() -> None:
         sa.Column("comments", sa.Text(), nullable=True),
         sa.ForeignKeyConstraint(
             ["customer_account_id"], ["customer_accounts.id"],
-            name="fk_devices_customer_account_id_customer_accounts",
+            name="fk_devices_customer_account_id",
             ondelete="RESTRICT",
         ),
         sa.ForeignKeyConstraint(
@@ -207,7 +207,7 @@ def upgrade() -> None:
         ),
         sa.UniqueConstraint(
             "serial_number", "customer_account_id",
-            name="uq_devices_serial_number_customer_account_id",
+            name="uq_devices_serial_number_account",
         ),
         sa.CheckConstraint(
             "status != 'CHECKED_IN' OR location_id IS NOT NULL",
@@ -251,7 +251,7 @@ def upgrade() -> None:
         ),
         sa.ForeignKeyConstraint(
             ["customer_account_id"], ["customer_accounts.id"],
-            name="fk_audit_logs_customer_account_id_customer_accounts",
+            name="fk_audit_logs_customer_account_id",
             ondelete="RESTRICT",
         ),
         sa.ForeignKeyConstraint(

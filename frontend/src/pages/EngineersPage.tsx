@@ -14,6 +14,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  MenuItem,
   TextField,
   Tooltip,
   Typography,
@@ -346,13 +347,12 @@ export function EngineersPage() {
                   size="small"
                   value={assignAccountId}
                   onChange={(e) => setAssignAccountId(e.target.value)}
-                  SelectProps={{ native: true }}
                 >
-                  <option value="">— select —</option>
+                  <MenuItem value="">— select —</MenuItem>
                   {unassignedAccounts.map((a) => (
-                    <option key={a.id} value={a.id}>
+                    <MenuItem key={a.id} value={a.id}>
                       {a.name}
-                    </option>
+                    </MenuItem>
                   ))}
                 </TextField>
                 <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
