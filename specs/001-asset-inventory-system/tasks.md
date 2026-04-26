@@ -115,14 +115,14 @@
 
 **Independent Test**: Super Admin creates Site → Building → Floor → Room; engineer can select that Room in the LocationSelector dropdown
 
-- [ ] T055 Create `backend/app/models/location.py`: `Location` model — `id` (UUID PK), `name` (str), `level` (Enum: SITE/BUILDING/FLOOR/ROOM), `parent_id` (FK → locations.id nullable), `customer_account_id` (FK → customer_accounts), `is_active` (bool); UNIQUE on `(name, parent_id, customer_account_id)`; CHECK `level=SITE → parent_id IS NULL`
-- [ ] T056 Create `backend/app/schemas/location.py`: `LocationCreate`, `LocationUpdate`, `LocationRead` (with `children: list[LocationRead] | None` for tree responses), `LocationList`
-- [ ] T057 Create `backend/app/repositories/location_repo.py`: `get_children(parent_id, account_id)`, `get_sites(account_id)`, `has_active_devices(location_id) → bool` (for deletion guard)
-- [ ] T058 Create `backend/app/services/location_service.py`: `delete_location(id, db)` — checks `has_active_devices`, raises `ConflictError` if true; `get_location_path(id, db) → list[Location]` (traverses parent chain for location_snapshot)
-- [ ] T059 Create `backend/app/api/v1/locations.py`: `GET /locations` (all, read by any authenticated engineer, filtered by account_id), `GET /locations/{id}/children` (lazy tree loading), `POST /locations` (Super Admin only), `PATCH /locations/{id}` (Super Admin only), `DELETE /locations/{id}` (Super Admin only, deletion guard enforced)
-- [ ] T060 Create `frontend/src/hooks/useLocations.ts`: `useLocationChildren(parentId, accountId)` (lazy loads per level), `useCreateLocation()`, `useDeleteLocation()`
-- [ ] T061 Create `frontend/src/components/common/LocationSelector.tsx`: 4 cascading MUI Select dropdowns (Site → Building → Floor → Room); each level loads only after parent selected; shows "No rooms available — contact admin" if Room level is empty
-- [ ] T062 Create `frontend/src/pages/LocationsPage.tsx`: MUI TreeView rendering 4-level hierarchy per account; Add child node buttons; Delete button (disabled with tooltip if active devices assigned); Super Admin only
+- [x] T055 Create `backend/app/models/location.py`: `Location` model — `id` (UUID PK), `name` (str), `level` (Enum: SITE/BUILDING/FLOOR/ROOM), `parent_id` (FK → locations.id nullable), `customer_account_id` (FK → customer_accounts), `is_active` (bool); UNIQUE on `(name, parent_id, customer_account_id)`; CHECK `level=SITE → parent_id IS NULL`
+- [x] T056 Create `backend/app/schemas/location.py`: `LocationCreate`, `LocationUpdate`, `LocationRead` (with `children: list[LocationRead] | None` for tree responses), `LocationList`
+- [x] T057 Create `backend/app/repositories/location_repo.py`: `get_children(parent_id, account_id)`, `get_sites(account_id)`, `has_active_devices(location_id) → bool` (for deletion guard)
+- [x] T058 Create `backend/app/services/location_service.py`: `delete_location(id, db)` — checks `has_active_devices`, raises `ConflictError` if true; `get_location_path(id, db) → list[Location]` (traverses parent chain for location_snapshot)
+- [x] T059 Create `backend/app/api/v1/locations.py`: `GET /locations` (all, read by any authenticated engineer, filtered by account_id), `GET /locations/{id}/children` (lazy tree loading), `POST /locations` (Super Admin only), `PATCH /locations/{id}` (Super Admin only), `DELETE /locations/{id}` (Super Admin only, deletion guard enforced)
+- [x] T060 Create `frontend/src/hooks/useLocations.ts`: `useLocationChildren(parentId, accountId)` (lazy loads per level), `useCreateLocation()`, `useDeleteLocation()`
+- [x] T061 Create `frontend/src/components/common/LocationSelector.tsx`: 4 cascading MUI Select dropdowns (Site → Building → Floor → Room); each level loads only after parent selected; shows "No rooms available — contact admin" if Room level is empty
+- [x] T062 Create `frontend/src/pages/LocationsPage.tsx`: MUI TreeView rendering 4-level hierarchy per account; Add child node buttons; Delete button (disabled with tooltip if active devices assigned); Super Admin only
 
 **Checkpoint**: Super Admin can build full location tree. LocationSelector in check-in form shows correct rooms.
 
